@@ -136,6 +136,21 @@ document.getElementById('contact-form').addEventListener('submit', (e) => {
     window.open(`https://wa.me/905321662852?text=${text}`, '_blank');
 });
 
+// ===== BOTTOM NAV ACTIVE STATE =====
+const bnavLinks = document.querySelectorAll('.bnav-link');
+const sections = document.querySelectorAll('section[id]');
+window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(sec => {
+        const top = sec.offsetTop - 100;
+        if (window.scrollY >= top) current = sec.getAttribute('id');
+    });
+    bnavLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.dataset.section === current) link.classList.add('active');
+    });
+});
+
 // ===== SMOOTH SCROLL =====
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', (e) => {
