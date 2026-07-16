@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Cerberus Ink Tattoo Studio | Manisa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#080808;
+  --bg2:#0f0f0f;
+  --bg3:#161616;
+  --card:#1a1a1a;
+  --border:rgba(255,255,255,0.07);
+  --red:#c0392b;
+  --red2:#e74c3c;
+  --red-glow:rgba(192,57,43,0.3);
+  --gold:#b8860b;
+  --gold2:#d4a017;
+  --text:#f0f0f0;
+  --muted:#888;
+  --accent:#c0392b;
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Barlow',sans-serif;
+  overflow-x:hidden;
+  padding-bottom:72px;
+}
+/* ── LOADER ── */
+#loader{
+  position:fixed;inset:0;background:#000;z-index:9999;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:20px;
+  transition:opacity 0.6s ease;
+}
+#loader.hide{opacity:0;pointer-events:none}
+.loader-logo{
+  font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:6px;
+  background:linear-gradient(135deg,#c0392b,#e74c3c);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  animation:pulse 1.5s ease-in-out infinite;
+}
+.loader-bar{width:200px;height:2px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden}
+.loader-fill{height:100%;background:linear-gradient(90deg,#c0392b,#e74c3c);width:0;animation:load 1.2s ease forwards}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+@keyframes load{0%{width:0}100%{width:100%}}
+
+/* ── STATUS BAR (mobil app hissi) ── */
+.app-header{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  background:rgba(8,8,8,0.95);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:14px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.app-logo{
+  font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;
+  background:linear-gradient(135deg,#c0392b,#e74c3c);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.app-logo span{color:rgba(255,255,255,0.4);font-size:11px;display:block;letter-spacing:4px;font-family:'Barlow',sans-serif;font-weight:500;margin-top:-4px}
+.header-right{display:flex;align-items:center;gap:12px}
+.rating-badge{
+  display:flex;align-items:center;gap:5px;
+  background:rgba(192,57,43,0.15);border:1px solid rgba(192,57,43,0.3);
+  border-radius:20px;padding:4px 10px;
+  font-size:12px;font-weight:700;color:#e74c3c;
+}
+.status-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:#2ecc71;box-shadow:0 0 8px #2ecc71;
+  animation:blink 2s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+
+/* ── HERO ── */
+.hero{
+  margin-top:62px;
+  min-height:95vh;
+  position:relative;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  overflow:hidden;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:
+    linear-gradient(to bottom, rgba(8,8,8,0.3) 0%, rgba(8,8,8,0.0) 30%, rgba(8,8,8,0.7) 70%, rgba(8,8,8,1) 100%),
+    url('https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?w=800&q=90') center/cover no-repeat;
+  transform:scale(1.05);
+  animation:heroZoom 8s ease forwards;
+}
+@keyframes heroZoom{from{transform:scale(1.05)}to{transform:scale(1)}}
+.hero-content{position:relative;z-index:2;padding:0 20px 40px}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(192,57,43,0.2);border:1px solid rgba(192,57,43,0.4);
+  border-radius:30px;padding:6px 14px;
+  font-size:11px;font-weight:600;letter-spacing:3px;color:#e74c3c;
+  margin-bottom:16px;text-transform:uppercase;
+  opacity:0;animation:fadeUp 0.8s 0.3s ease forwards;
+}
+.hero-tag::before{content:'';width:6px;height:6px;border-radius:50%;background:#e74c3c;box-shadow:0 0 8px #e74c3c}
+.hero h1{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(56px,12vw,88px);
+  line-height:0.9;letter-spacing:2px;
+  opacity:0;animation:fadeUp 0.8s 0.5s ease forwards;
+}
+.hero h1 span{
+  display:block;
+  background:linear-gradient(135deg,#c0392b 0%,#e74c3c 50%,#ff6b6b 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hero-sub{
+  font-size:14px;font-weight:400;color:rgba(255,255,255,0.6);
+  letter-spacing:2px;margin-top:12px;text-transform:uppercase;
+  opacity:0;animation:fadeUp 0.8s 0.7s ease forwards;
+}
+.hero-actions{
+  display:flex;gap:12px;margin-top:28px;
+  opacity:0;animation:fadeUp 0.8s 0.9s ease forwards;
+}
+.btn-primary{
+  flex:1;padding:16px;border-radius:12px;
+  background:linear-gradient(135deg,#c0392b,#e74c3c);
+  color:#fff;font-weight:700;font-size:15px;letter-spacing:1px;
+  border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  text-decoration:none;
+  box-shadow:0 4px 20px rgba(192,57,43,0.4);
+  transition:transform 0.2s,box-shadow 0.2s;
+}
+.btn-primary:active{transform:scale(0.97)}
+.btn-outline{
+  padding:16px 20px;border-radius:12px;
+  border:1px solid rgba(255,255,255,0.2);
+  color:#fff;font-weight:600;font-size:15px;
+  background:rgba(255,255,255,0.05);backdrop-filter:blur(10px);
+  cursor:pointer;text-decoration:none;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:border-color 0.2s,background 0.2s;
+}
+.btn-outline:active{background:rgba(255,255,255,0.1)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── STATS ROW ── */
+.stats-row{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  background:var(--bg2);border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+}
+.stat{
+  padding:20px 12px;text-align:center;
+  border-right:1px solid var(--border);
+  position:relative;overflow:hidden;
+}
+.stat:last-child{border-right:none}
+.stat::before{
+  content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:30px;height:2px;background:linear-gradient(90deg,#c0392b,#e74c3c);
+}
+.stat-num{
+  font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:2px;
+  background:linear-gradient(135deg,#c0392b,#e74c3c);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.stat-label{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:2px}
+
+/* ── SECTIONS ── */
+section{padding:48px 20px}
+.sec-header{margin-bottom:28px}
+.sec-tag{
+  font-size:10px;font-weight:700;letter-spacing:4px;color:#c0392b;
+  text-transform:uppercase;margin-bottom:8px;
+  display:flex;align-items:center;gap:8px;
+}
+.sec-tag::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(192,57,43,0.5),transparent)}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:38px;letter-spacing:2px;line-height:1}
+.sec-title span{color:#c0392b}
+.sec-sub{font-size:14px;color:var(--muted);margin-top:8px;line-height:1.6}
+
+/* ── SERVİSLER ── */
+#services{background:var(--bg)}
+.services-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.srv-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;padding:20px;
+  position:relative;overflow:hidden;
+  transition:border-color 0.3s,transform 0.3s;
+}
+.srv-card:first-child{grid-column:1/-1}
+.srv-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,#c0392b,transparent);
+}
+.srv-card:hover{border-color:rgba(192,57,43,0.4);transform:translateY(-2px)}
+.srv-icon{
+  width:48px;height:48px;border-radius:12px;
+  background:rgba(192,57,43,0.1);border:1px solid rgba(192,57,43,0.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;margin-bottom:14px;
+}
+.srv-name{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;letter-spacing:1px;margin-bottom:6px}
+.srv-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.srv-price{
+  display:inline-block;margin-top:12px;
+  font-size:11px;font-weight:700;color:#c0392b;letter-spacing:1px;
+  background:rgba(192,57,43,0.1);border-radius:6px;padding:4px 10px;
+}
+
+/* ── GALERİ ── */
+#gallery{background:var(--bg2)}
+.gallery-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.gallery-item{
+  border-radius:12px;overflow:hidden;aspect-ratio:1;
+  position:relative;cursor:pointer;
+}
+.gallery-item:first-child{grid-column:1/-1;aspect-ratio:16/9}
+.gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s}
+.gallery-item:hover img{transform:scale(1.05)}
+.gallery-item::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(0,0,0,0.6),transparent);
+  opacity:0;transition:opacity 0.3s;
+}
+.gallery-item:hover::after{opacity:1}
+.gallery-overlay{
+  position:absolute;bottom:12px;left:12px;z-index:2;
+  font-size:11px;font-weight:600;color:#fff;letter-spacing:2px;text-transform:uppercase;
+  opacity:0;transition:opacity 0.3s;
+}
+.gallery-item:hover .gallery-overlay{opacity:1}
+
+/* ── HAKKIMIZDA ── */
+#about{background:var(--bg)}
+.about-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:20px;overflow:hidden;
+}
+.about-img{width:100%;height:200px;object-fit:cover}
+.about-body{padding:24px}
+.about-body p{font-size:14px;color:rgba(255,255,255,0.7);line-height:1.8;margin-bottom:14px}
+.about-features{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.feat{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.15);
+  border-radius:10px;padding:10px 12px;
+  font-size:12px;font-weight:600;
+}
+.feat svg{flex-shrink:0}
+
+/* ── YORUMLAR ── */
+#reviews{background:var(--bg2)}
+.reviews-scroll{
+  display:flex;gap:12px;overflow-x:auto;padding-bottom:12px;
+  scroll-snap-type:x mandatory;-ms-overflow-style:none;scrollbar-width:none;
+}
+.reviews-scroll::-webkit-scrollbar{display:none}
+.review-card{
+  min-width:280px;scroll-snap-align:start;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;padding:20px;
+  position:relative;
+}
+.review-card::before{
+  content:'"';position:absolute;top:12px;right:16px;
+  font-family:'Bebas Neue',sans-serif;font-size:64px;
+  color:rgba(192,57,43,0.15);line-height:1;
+}
+.review-stars{color:#f39c12;font-size:14px;margin-bottom:10px}
+.review-text{font-size:13px;color:rgba(255,255,255,0.7);line-height:1.6;margin-bottom:14px}
+.review-author{display:flex;align-items:center;gap:10px}
+.review-avatar{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,#c0392b,#e74c3c);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:14px;
+}
+.review-name{font-size:13px;font-weight:600}
+.review-date{font-size:11px;color:var(--muted)}
+
+/* ── İLETİŞİM ── */
+#contact{background:var(--bg)}
+.contact-cards{display:flex;flex-direction:column;gap:10px}
+.contact-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;padding:16px 20px;
+  display:flex;align-items:center;gap:16px;
+  text-decoration:none;color:var(--text);
+  transition:border-color 0.3s,transform 0.2s;
+}
+.contact-card:active{transform:scale(0.98)}
+.contact-card:hover{border-color:rgba(192,57,43,0.4)}
+.contact-icon{
+  width:48px;height:48px;border-radius:14px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;
+}
+.contact-icon.red{background:rgba(192,57,43,0.15);border:1px solid rgba(192,57,43,0.25)}
+.contact-icon.green{background:rgba(46,204,113,0.12);border:1px solid rgba(46,204,113,0.25)}
+.contact-icon.blue{background:rgba(52,152,219,0.12);border:1px solid rgba(52,152,219,0.25)}
+.contact-info{flex:1}
+.contact-label{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
+.contact-value{font-size:15px;font-weight:600}
+.contact-arrow{color:var(--muted);font-size:18px}
+
+/* ── HARİTA ── */
+.map-card{
+  margin-top:10px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;overflow:hidden;
+}
+.map-img{width:100%;height:160px;object-fit:cover}
+.map-info{padding:16px 20px;display:flex;align-items:center;gap:12px}
+.map-pin{color:#c0392b;font-size:20px;flex-shrink:0}
+.map-text{font-size:13px;color:rgba(255,255,255,0.7);line-height:1.5}
+
+/* ── ÇALIŞMA SAATLERİ ── */
+#hours{background:var(--bg2)}
+.hours-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;overflow:hidden;
+}
+.hours-header{
+  padding:16px 20px;
+  background:rgba(192,57,43,0.1);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;
+  font-weight:700;font-size:14px;letter-spacing:1px;
+}
+.hours-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 20px;border-bottom:1px solid var(--border);
+}
+.hours-row:last-child{border-bottom:none}
+.hours-row.today{background:rgba(192,57,43,0.08)}
+.hours-day{font-size:13px;color:rgba(255,255,255,0.7)}
+.hours-day.today-label{color:#fff;font-weight:700}
+.hours-time{font-size:13px;font-weight:600;color:#e74c3c}
+.hours-today-badge{
+  font-size:9px;font-weight:700;color:#c0392b;letter-spacing:2px;
+  background:rgba(192,57,43,0.15);border-radius:4px;padding:2px 6px;text-transform:uppercase;
+}
+
+/* ── CTA ── */
+.cta{
+  margin:0 20px 20px;
+  background:linear-gradient(135deg,#1a0505,#2d0a0a);
+  border:1px solid rgba(192,57,43,0.3);
+  border-radius:20px;padding:28px 20px;text-align:center;
+  position:relative;overflow:hidden;
+}
+.cta::before{
+  content:'';position:absolute;
+  top:-40px;right:-40px;width:120px;height:120px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(192,57,43,0.2),transparent);
+}
+.cta-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px;margin-bottom:8px}
+.cta-sub{font-size:13px;color:rgba(255,255,255,0.6);line-height:1.5;margin-bottom:20px}
+.cta-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  background:linear-gradient(135deg,#c0392b,#e74c3c);
+  color:#fff;font-weight:700;font-size:15px;letter-spacing:1px;
+  padding:15px 30px;border-radius:12px;text-decoration:none;
+  box-shadow:0 4px 20px rgba(192,57,43,0.4);
+}
+
+/* ── FOOTER ── */
+footer{
+  background:var(--bg2);border-top:1px solid var(--border);
+  padding:24px 20px;text-align:center;
+}
+.footer-logo{
+  font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:4px;
+  background:linear-gradient(135deg,#c0392b,#e74c3c);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:6px;
+}
+.footer-sub{font-size:12px;color:var(--muted);letter-spacing:2px;margin-bottom:16px}
+.footer-socials{display:flex;justify-content:center;gap:12px;margin-bottom:16px}
+.social-btn{
+  width:40px;height:40px;border-radius:12px;
+  background:var(--card);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;transition:border-color 0.3s;
+}
+.social-btn:hover{border-color:rgba(192,57,43,0.4)}
+.footer-copy{font-size:11px;color:rgba(255,255,255,0.3)}
+
+/* ── BOTTOM NAV ── */
+.mob-bot{
+  display:none;position:fixed;bottom:0;left:0;right:0;height:72px;
+  background:rgba(8,8,8,0.97);backdrop-filter:blur(24px);
+  border-top:1px solid rgba(255,255,255,0.08);z-index:9998;
+  align-items:stretch;justify-content:space-around;
+}
+@media(max-width:768px){.mob-bot{display:flex!important}}
+.mob-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:4px;text-decoration:none;color:var(--muted);
+  font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;
+  transition:color 0.2s;position:relative;
+}
+.mob-btn svg{transition:transform 0.2s}
+.mob-btn.active,.mob-btn:active{color:#e74c3c}
+.mob-btn.active svg{transform:scale(1.15)}
+.mob-btn.active::after{
+  content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:24px;height:2px;background:linear-gradient(90deg,#c0392b,#e74c3c);
+  border-radius:0 0 2px 2px;
+}
+.mob-center-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+}
+.mob-call{
+  width:48px;height:48px;border-radius:16px;
+  background:linear-gradient(135deg,#c0392b,#e74c3c);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 20px rgba(192,57,43,0.4);
+  text-decoration:none;
+}
+.mob-call-label{font-size:8px;font-weight:700;color:#e74c3c;letter-spacing:1px}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.6s ease,transform 0.6s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--red);border-radius:2px}
+
+/* ── iOS fixes ── */
+input,textarea,select{font-size:16px!important}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-logo">CERBERUS INK</div>
+  <div class="loader-bar"><div class="loader-fill"></div></div>
+</div>
+
+<!-- APP HEADER -->
+<header class="app-header">
+  <div>
+    <div class="app-logo">CERBERUS INK<span>TATTOO STUDIO</span></div>
+  </div>
+  <div class="header-right">
+    <div class="rating-badge">★ 5.0</div>
+    <div class="status-dot" title="Bugün Açık"></div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Manisa · Est. 2023</div>
+    <h1>CERBERUS<span>INK</span></h1>
+    <p class="hero-sub">Tattoo & Piercing Studio · Şehzadeler</p>
+    <div class="hero-actions">
+      <a href="tel:05321662852" class="btn-primary">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.81 19.79 19.79 0 0117 2.18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L20.5 10a15.93 15.93 0 006.93 6.93l1.17-1.17a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7a2 2 0 011.72 2z"/></svg>
+        Hemen Ara
+      </a>
+      <a href="https://wa.me/905321662852" class="btn-outline">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-row reveal">
+  <div class="stat">
+    <div class="stat-num" data-target="500">0</div>
+    <div class="stat-label">Dövme</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">5.0</div>
+    <div class="stat-label">Google Puan</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num" data-target="9">0</div>
+    <div class="stat-label">Yorum</div>
+  </div>
+</div>
+
+<!-- SERVİSLER -->
+<section id="services">
+  <div class="sec-header reveal">
+    <div class="sec-tag">Hizmetler</div>
+    <h2 class="sec-title">NE <span>YAPIYORUZ</span></h2>
+    <p class="sec-sub">Profesyonel ekipman, steril ortam, kalıcı sanat.</p>
+  </div>
+  <div class="services-grid">
+    <div class="srv-card reveal">
+      <div class="srv-icon">🖊</div>
+      <div class="srv-name">Kalıcı Dövme</div>
+      <div class="srv-desc">Her tarza uygun özgün tasarımlar. Minimal'den tribal'e, portreden geometriğe tüm stiller mevcut. Kendi desenini getir ya da stüdyomuzun kataloğunu keşfet.</div>
+      <span class="srv-price">KİŞİYE ÖZEL FİYATLANDIRMA</span>
+    </div>
+    <div class="srv-card reveal">
+      <div class="srv-icon">💎</div>
+      <div class="srv-name">Piercing</div>
+      <div class="srv-desc">Kulak, burun, dudak ve vücut piercingleri. Titanyum & implant çelik takılar ile güvenli uygulama.</div>
+      <span class="srv-price">UYGUN FİYATLAR</span>
+    </div>
+    <div class="srv-card reveal">
+      <div class="srv-icon">✏️</div>
+      <div class="srv-name">Özel Tasarım</div>
+      <div class="srv-desc">Sıfırdan özgün konsept oluşturma. Hayalindeki dövmeyi birlikte tasarlayalım.</div>
+      <span class="srv-price">ÜCRETSİZ KONSÜLTASYON</span>
+    </div>
+  </div>
+</section>
+
+<!-- GALERİ -->
+<section id="gallery" style="padding-top:48px;padding-bottom:48px">
+  <div class="sec-header reveal" style="padding:0 20px">
+    <div class="sec-tag">Galeri</div>
+    <h2 class="sec-title">ÇALIŞMA<span>LARIMIZ</span></h2>
+  </div>
+  <div style="padding:0 20px">
+    <div class="gallery-grid reveal">
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1590246814883-57c511e64671?w=800&q=85" alt="Dövme Çalışması" loading="lazy">
+        <span class="gallery-overlay">Blackwork</span>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?w=600&q=80" alt="Dövme" loading="lazy">
+        <span class="gallery-overlay">Realism</span>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1568515387631-8b650bbcdb90?w=600&q=80" alt="Tattoo" loading="lazy">
+        <span class="gallery-overlay">Geometric</span>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1604881991720-f91add269bed?w=600&q=80" alt="Tattoo" loading="lazy">
+        <span class="gallery-overlay">Fine Line</span>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1562962230-16e4623d36e6?w=600&q=80" alt="Tattoo" loading="lazy">
+        <span class="gallery-overlay">Traditional</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HAKKIMIZDA -->
+<section id="about">
+  <div class="sec-header reveal">
+    <div class="sec-tag">Hakkımızda</div>
+    <h2 class="sec-title">CERBERUS <span>INK</span></h2>
+  </div>
+  <div class="about-card reveal">
+    <img class="about-img" src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=800&q=80" alt="Stüdyo" loading="lazy">
+    <div class="about-body">
+      <p>Manisa Şehzadeler'de hizmet veren Cerberus Ink Tattoo Studio, sanatı ciltlere işleme tutkusuyla kurulmuş bir dövme stüdyosudur.</p>
+      <p>Her müşterimizi dinler, hayalindeki tasarımı birlikte yaratırız. Steril malzemeler, profesyonel dokunuş ve kendinizi evinizde hissedeceğiniz samimi bir atmosfer bizim önceliğimiz.</p>
+      <div class="about-features">
+        <div class="feat">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#e74c3c" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+          Steril Ortam
+        </div>
+        <div class="feat">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#e74c3c" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+          Pro Ekipman
+        </div>
+        <div class="feat">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#e74c3c" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+          Özel Tasarım
+        </div>
+        <div class="feat">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#e74c3c" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+          5.0 Google
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- YORUMLAR -->
+<section id="reviews">
+  <div class="sec-header reveal">
+    <div class="sec-tag">Yorumlar</div>
+    <h2 class="sec-title">MÜŞTERİ <span>DENEYİMLERİ</span></h2>
+  </div>
+  <div class="reviews-scroll reveal">
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"Harika bir deneyimdi. Hem temiz hem de profesyonel bir ortamda çalışıyorlar. Dövmemden çok memnun kaldım!"</p>
+      <div class="review-author">
+        <div class="review-avatar">M</div>
+        <div>
+          <div class="review-name">Merve K.</div>
+          <div class="review-date">Google Yorumu · 5/5</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"İstediğim tasarımı mükemmel şekilde uyguladılar. Çok titiz ve özenli bir çalışma. Kesinlikle tavsiye ederim!"</p>
+      <div class="review-author">
+        <div class="review-avatar">A</div>
+        <div>
+          <div class="review-name">Ahmet Y.</div>
+          <div class="review-date">Google Yorumu · 5/5</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"Manisa'daki en iyi dövme stüdyosu. Fiyat/kalite açısından çok başarılı. Piercing için de geldim, harika oldu."</p>
+      <div class="review-author">
+        <div class="review-avatar">S</div>
+        <div>
+          <div class="review-name">Selin A.</div>
+          <div class="review-date">Google Yorumu · 5/5</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"İkinci dövmemi de buraya yaptırdım. Her seferinde aynı kalite ve özen. Teşekkürler Cerberus Ink!"</p>
+      <div class="review-author">
+        <div class="review-avatar">E</div>
+        <div>
+          <div class="review-name">Emre T.</div>
+          <div class="review-date">Google Yorumu · 5/5</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ÇALIŞMA SAATLERİ -->
+<section id="hours">
+  <div class="sec-header reveal">
+    <div class="sec-tag">Çalışma Saatleri</div>
+    <h2 class="sec-title">BIZI <span>BULUN</span></h2>
+  </div>
+  <div class="hours-card reveal">
+    <div class="hours-header">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#e74c3c" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      Haftalık Program
+    </div>
+    <div class="hours-row">
+      <span class="hours-day">Pazartesi</span>
+      <span class="hours-time">12:00 – 21:00</span>
+    </div>
+    <div class="hours-row">
+      <span class="hours-day">Salı</span>
+      <span class="hours-time">12:00 – 21:00</span>
+    </div>
+    <div class="hours-row">
+      <span class="hours-day">Çarşamba</span>
+      <span class="hours-time">12:00 – 21:00</span>
+    </div>
+    <div class="hours-row today">
+      <span class="hours-day today-label">Çarşamba <span class="hours-today-badge">Bugün</span></span>
+      <span class="hours-time">12:00 – 21:00</span>
+    </div>
+    <div class="hours-row">
+      <span class="hours-day">Perşembe</span>
+      <span class="hours-time">12:00 – 21:00</span>
+    </div>
+    <div class="hours-row">
+      <span class="hours-day">Cuma</span>
+      <span class="hours-time">12:00 – 21:00</span>
+    </div>
+    <div class="hours-row">
+      <span class="hours-day">Cumartesi</span>
+      <span class="hours-time">12:00 – 21:00</span>
+    </div>
+    <div class="hours-row">
+      <span class="hours-day">Pazar</span>
+      <span class="hours-time" style="color:var(--muted)">Kapalı</span>
+    </div>
+  </div>
+</section>
+
+<!-- İLETİŞİM -->
+<section id="contact">
+  <div class="sec-header reveal">
+    <div class="sec-tag">İletişim</div>
+    <h2 class="sec-title">RANDEVU <span>AL</span></h2>
+    <p class="sec-sub">Arayın veya WhatsApp'tan mesaj atın.</p>
+  </div>
+  <div class="contact-cards">
+    <a href="tel:05321662852" class="contact-card reveal">
+      <div class="contact-icon red">📞</div>
+      <div class="contact-info">
+        <div class="contact-label">Telefon</div>
+        <div class="contact-value">0532 166 28 52</div>
+      </div>
+      <div class="contact-arrow">›</div>
+    </a>
+    <a href="https://wa.me/905321662852" class="contact-card reveal">
+      <div class="contact-icon green">💬</div>
+      <div class="contact-info">
+        <div class="contact-label">WhatsApp</div>
+        <div class="contact-value">Mesaj Gönder</div>
+      </div>
+      <div class="contact-arrow">›</div>
+    </a>
+    <a href="https://maps.google.com/?q=Cerberus+Ink+Tattoo+Manisa" target="_blank" class="contact-card reveal">
+      <div class="contact-icon blue">📍</div>
+      <div class="contact-info">
+        <div class="contact-label">Adres</div>
+        <div class="contact-value" style="font-size:13px">1. Anafartalar, 1714. Sk. Şehzadeler / Manisa</div>
+      </div>
+      <div class="contact-arrow">›</div>
+    </a>
+  </div>
+  <div class="map-card reveal" style="margin-top:10px">
+    <img class="map-img" src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&q=70" alt="Manisa Harita" loading="lazy">
+    <div class="map-info">
+      <div class="map-pin">📍</div>
+      <div class="map-text">1. Anafartalar Mahallesi, 1714. Sk., 45015 Şehzadeler / Manisa</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta reveal">
+  <div class="cta-title">RANDEVU ALMAYA HAZIR MISIN?</div>
+  <p class="cta-sub">Hayalindeki dövme için hemen iletişime geç. Ücretsiz konsültasyon sunuyoruz.</p>
+  <a href="https://wa.me/905321662852?text=Merhaba, randevu almak istiyorum." class="cta-btn">
+    WhatsApp ile Randevu Al →
+  </a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">CERBERUS INK</div>
+  <div class="footer-sub">TATTOO & PIERCING STUDIO · MANİSA</div>
+  <div class="footer-socials">
+    <a href="tel:05321662852" class="social-btn">📞</a>
+    <a href="https://wa.me/905321662852" class="social-btn">💬</a>
+    <a href="https://maps.google.com/?q=Cerberus+Ink+Tattoo+Manisa" class="social-btn">📍</a>
+  </div>
+  <div class="footer-copy">© 2024 Cerberus Ink Tattoo Studio. Tüm hakları saklıdır.</div>
+</footer>
+
+<!-- BOTTOM NAV -->
+<div class="mob-bot">
+  <a href="#home" class="mob-btn active" id="nav-home">
+    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+    Ana Sayfa
+  </a>
+  <a href="#gallery" class="mob-btn" id="nav-gallery">
+    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+    Galeri
+  </a>
+  <div class="mob-center-btn">
+    <a href="tel:05321662852" class="mob-call">
+      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.81 19.79 19.79 0 010 2.18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L4.5 10a16 16 0 006.93 6.93l1.17-1.17a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7a2 2 0 011.72 2z"/></svg>
+    </a>
+    <span class="mob-call-label">ARA</span>
+  </div>
+  <a href="#services" class="mob-btn" id="nav-services">
+    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+    Hizmetler
+  </a>
+  <a href="#contact" class="mob-btn" id="nav-contact">
+    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+    İletişim
+  </a>
+</div>
+
+<script>
+// Loader
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('hide');
+  }, 1400);
+});
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+  });
+}, {threshold: 0.12});
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Counter animation
+function animateCounter(el, target, suffix='') {
+  let start = 0;
+  const duration = 1800;
+  const step = (timestamp) => {
+    if(!start) start = timestamp;
+    const progress = Math.min((timestamp - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.floor(eased * target) + (progress === 1 ? (suffix||'+') : '+');
+    if(progress < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+const counterObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting) {
+      const t = parseInt(e.target.dataset.target);
+      if(t) animateCounter(e.target, t);
+      counterObs.unobserve(e.target);
+    }
+  });
+}, {threshold: 0.5});
+document.querySelectorAll('[data-target]').forEach(el => counterObs.observe(el));
+
+// Bottom nav active state
+const sections = ['home','services','gallery','about','reviews','hours','contact'];
+const navIds = {home:'nav-home',services:'nav-services',gallery:'nav-gallery',contact:'nav-contact'};
+window.addEventListener('scroll', () => {
+  let current = 'home';
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if(el && window.scrollY >= el.offsetTop - 80) current = id;
+  });
+  document.querySelectorAll('.mob-btn').forEach(b => b.classList.remove('active'));
+  const activeId = navIds[current];
+  if(activeId) document.getElementById(activeId)?.classList.add('active');
+}, {passive:true});
+
+// Today highlight
+const days = ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
+const today = days[new Date().getDay()];
+document.querySelectorAll('.hours-row').forEach(row => {
+  row.classList.remove('today');
+  const dayEl = row.querySelector('.hours-day');
+  if(dayEl && dayEl.textContent.trim().startsWith(today)) {
+    row.classList.add('today');
+    dayEl.classList.add('today-label');
+  }
+});
+</script>
+</body>
+</html>
